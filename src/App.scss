@@ -53,3 +53,19 @@
     transform: rotate(360deg);
   }
 }
+
+.character {
+  background: gray;
+  border: 20px solid black;
+
+
+  .card-image > img {
+    max-width: 145px;
+  }
+
+  .card-info {
+    p {
+      text-transform: capitalize;
+    }
+  }
+}
