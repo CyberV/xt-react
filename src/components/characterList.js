@@ -11,6 +11,11 @@ class CharacterList extends Component {
          )
          }
 
+         {!this.props.data && (
+           <span>No Characters Found!
+           </span>
+         )}
+
 </div> 
     );
   }

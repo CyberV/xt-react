@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background: url(https://www.toptal.com/designers/subtlepatterns/patterns/double-bubble-dark.png);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -31,17 +31,14 @@
 .main-body {
   .avlbl-filters {
     height: auto;
-    background: yellow;
-  }
+      }
 
   .slctd-filters {
     height: auto;
-    background: red;
   }
 
   .char-list {
     height: auto;
-    background: pink;
   }
 }
 
@@ -54,16 +51,52 @@
   }
 }
 
-.character {
-  background: gray;
-  border: 20px solid black;
+.custom-control-label::before, .custom-control-label::after {
+  top: 10px;
+}
 
+.character {
+  background: rgb(63, 58, 58);
+  border: 5px solid black;
+padding: 10px;
 
   .card-image > img {
-    max-width: 145px;
+    max-width: 100%;
   }
 
-  .card-info {
+  .nameplate {
+    white-space: nowrap; 
+    width: 100%; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+
+    position: relative;
+    top: -58px;
+    background: gray;
+    opacity: 0.8;
+    margin: 0px 0 -50px 14px;
+    height: 58px;
+  }
+
+  .char-id {
+    font-size: 80%;
+  }
+
+  .char-info {
+    font-size: 75%;
+    .row {
+      border-bottom: 1px solid gray;
+    }
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .col-sm-4 {
+      text-transform: uppercase;
+    }
+    .col-sm-8 {
+      color: orange;
+    }
     p {
       text-transform: capitalize;
     }
