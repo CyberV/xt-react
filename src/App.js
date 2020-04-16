@@ -23,7 +23,9 @@ class App extends Component {
     this.state = {
       initialData: [],
       filters: [],
-      byName: ''
+      byName: '',
+      sort: 'asc',
+      loading: false
     };
 
     this.charUrl = 'https://rickandmortyapi.com/api/character/';
@@ -47,7 +49,7 @@ class App extends Component {
       byName: e.target.value.trim()
     });
     let that = this;
-    this.nameIntervalToken = setTimeout( function() {
+    this.nameIntervalToken = setTimeout(function () {
       that.fetchDataFromApi();
     }, 100);
   }
@@ -64,7 +66,8 @@ class App extends Component {
 
   removeFilter(filter) {
     let fltrs = this.state.filters;
-    fltrs.splice(fltrs.indexOf(filter), 1);
+    let indx = fltrs.findIndex((f) => f[Object.keys(f)[0]] === filter[Object.keys(f)[0]]);
+    fltrs.splice(indx, 1);
     this.setState({
       filters: fltrs
     });
@@ -90,6 +93,7 @@ class App extends Component {
     });
 
     this.setState({
+      sort: 'asc',
       initialData: data
     });
   }
@@ -102,21 +106,34 @@ class App extends Component {
     });
 
     this.setState({
+      sort: 'desc',
       initialData: data
     });
   }
 
   fetchDataFromApi() {
+    this.setState( {
+      loading: true
+    })
     const { filters, byName } = this.state;
     if (filters.length === 0 && byName === '') {
       fetch(this.charUrl)
         .then(res => res.json())
         .then((out) => {
-          console.log('Output: ', out);
+          let results = out.results;
+          if (this.state.sort === 'desc') {
+            results.reverse();
+          }
           this.setState({
-            initialData: out.results
+            initialData: results
           }
           );
+
+          setTimeout( ()=> {
+            this.setState( {
+              loading: false
+            })
+          }, 1000);
         }).catch(err => console.error(err));
     } else {
       let stub = '?';
@@ -134,11 +151,20 @@ class App extends Component {
       fetch(this.charUrl + stub)
         .then(res => res.json())
         .then((out) => {
-          console.log('Output: ', out);
+          let results = out.results;
+          if (this.state.sort === 'desc') {
+            results.reverse();
+          }
           this.setState({
-            initialData: out.results
+            initialData: results
           }
           );
+
+          setTimeout( ()=> {
+            this.setState( {
+              loading: false
+            })
+          }, 1000);
         }).catch(err => console.error(err));
     }
   }
@@ -147,6 +173,8 @@ class App extends Component {
     this.fetchDataFromApi();
   }
   render() {
+
+    const { sort } = this.state;
     return (
 
       //<Provider store={store}>
@@ -164,24 +192,33 @@ class App extends Component {
                   <div className="col-sm-8 col-md-6 col-lg-4 slctd-filters">
 
                     <div class="input-group">
-                      <input type="text" onChange={this.setName} class="form-control" name="filter-name" id="filter-name" placeholder="Search for..." />
+                      <input type="text" onChange={this.setName} class="form-control" name="filter-name" id="filter-name" placeholder="Search by name..." />
                     </div>
                     {/* <span>Search By Name </span> <input type="text" name="filter-name" id="filter-name" onChange={this.handleNameChange} ></input> */}
                   </div>
-                  <div className="col-sm-4">
-                  Sorted by ID <br/>
-                  <div class="custom-control custom-radio custom-control-inline" >
-                    <input checked="true" type="radio" class="custom-control-input" id="customRadio1" name="example1" />
-                    <label class="custom-control-label" for="customRadio1" onClick={this.sortAscending}>Ascending</label>
-                </div>
-                  <div class="custom-control custom-radio custom-control-inline" >
-                    <input type="radio" class="custom-control-input" id="customRadio2" name="example1" />
-                    <label class="custom-control-label" for="customRadio2" onClick={this.sortDescending}>Descending</label>
-                  </div>
+                  <div className="col-sm-4  col-md-6 offset-lg-2 col-lg-6">
+                    <div className="row">
+                      <div className="col-sm-4"><span style={{textDecoration:'underline'}}>Sorted by ID </span></div>
+                      <div className="col-sm-4">
+                        <div class="custom-control custom-radio custom-control-inline" >
+                          <input checked={sort === 'asc'} type="radio" class="custom-control-input" id="sortAscending" name="example1" />
+                          <label class="custom-control-label" for="sortAscending" onClick={this.sortAscending}>Ascending</label>
+                        </div>
+                      </div>
+                      <div className="col-sm-4">
+                        <div class="custom-control custom-radio custom-control-inline" >
+                          <input checked={sort === 'desc'} type="radio" class="custom-control-input" id="sortDescending" name="example1" />
+                          <label class="custom-control-label" for="sortDescending" onClick={this.sortDescending}>Descending</label>
+                        </div>
+                      </div>
+
+                    </div>
 
                   </div>
                   <div className="col-sm-12 char-list">
-                    <CharacterList data={this.state.initialData}></CharacterList>
+
+                    {this.state.loading && (<img src="https://media.giphy.com/media/LOcQMUSJnTbirK0nOR/giphy.gif"></img>)}
+                    {!this.state.loading && <CharacterList data={this.state.initialData}></CharacterList>}
                   </div>
 
                 </div>

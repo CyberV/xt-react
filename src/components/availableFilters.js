@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
+import { cyan } from 'color-name';
 
 
 class AvailableFilters extends Component {
@@ -28,12 +29,15 @@ class AvailableFilters extends Component {
         const filterCategoryStyle = {
             textTransform: 'capitalize',
             borderTop: '2px solid',
-            marginTop: '1em'
+            marginTop: '1em',
+            color: '#61dafb'
+
           };
 
         const filterFieldStyle = {
             textAlign: 'left',
             textTransform: 'capitalize',
+            fontSize: '80%'
         };
 
         const filterLabelStyle = {
@@ -42,7 +46,7 @@ class AvailableFilters extends Component {
 
         return (
             <React.Fragment>
-                <p>Available Filters</p>
+                <p style={{textDecoration:'underline'}} >Available Filters</p>
 
                 {filterKeys && filterKeys.map((key) => {
                     return (<React.Fragment>

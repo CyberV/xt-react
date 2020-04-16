@@ -52,7 +52,11 @@
 }
 
 .custom-control-label::before, .custom-control-label::after {
-  top: 10px;
+  top: 6px;
+}
+
+.custom-radio, .custom-control-input, .custom-control-label {
+  cursor: pointer;
 }
 
 .character {
@@ -93,9 +97,11 @@ padding: 10px;
 
     .col-sm-4 {
       text-transform: uppercase;
+      text-align: left;
     }
     .col-sm-8 {
       color: orange;
+      text-align: right;
     }
     p {
       text-transform: capitalize;
